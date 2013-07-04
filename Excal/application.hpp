@@ -19,14 +19,11 @@
 class Application {
     private:
     
-        static float CalculateExpression(std::queue<std::shared_ptr<State>> queue) {
+        static float CalculateExpression(std::vector<std::shared_ptr<State>> tokens) {
             std::stack< std::shared_ptr<State> > tokenStack;
             
-            while ( queue.size() > 0 )
+            for (auto state : tokens)
             {
-                auto state = queue.front();
-                queue.pop();
-                
                 if (!state->isKindOfClass(SymbolState *)) {
                     tokenStack.push(state);
                 }
@@ -36,8 +33,8 @@ class Application {
                     
                     float d1 = State::GetValue<NumberState>()(state1);
                     float d2 = State::GetValue<NumberState>()(state2);
-                    
-                    float result = (*static_cast<SymbolState *>(state.get()))(d1, d2);
+                                        
+                    float result = (*static_cast<SymbolState *>(state.get()))(d2, d1);
                     
                     std::shared_ptr<State> newState = std::make_shared<NumberState>(result);
                     tokenStack.push( newState );
@@ -54,9 +51,9 @@ class Application {
         {
             // uncomment to enable command line support
             //Scanner * scanner = new Scanner(argv[2]);
-            Scanner * scanner = new Scanner("3.14*2");
-                    
-            std::queue< std::shared_ptr<State> > queue;
+            Scanner * scanner = new Scanner("6-2-2");
+            
+            std::vector< std::shared_ptr<State> > tokens;
             std::stack< std::shared_ptr<State> > stack;
             
             while (scanner->valid()) {
@@ -65,7 +62,7 @@ class Application {
                     while (Accept(scanner->next(), NumberValidator()) || Accept(scanner->next(), PeriodValidator())) {
                         number->append(scanner->advance());
                     }
-                    queue.push(number);
+                    tokens.push_back(number);
                 }
                 else if (Accept(scanner->next(), LeftParenthesisValidator())) {
                     stack.push( std::make_shared<LeftParenthesisState>(scanner->advance()));
@@ -77,7 +74,20 @@ class Application {
                     stack.push( std::make_shared<PlusOperatorState>(scanner->advance()) );
                 }
                 else if (Accept(scanner->next(), MinusSymbolValidator())) {
-                    stack.push( std::make_shared<MinusOperatorState>(scanner->advance()) );
+
+                    // TODO: this might not be working, not entirely sure what's going on.
+                    auto minus = std::make_shared<MinusOperatorState>(scanner->advance());
+                    while ( !stack.empty() && stack.top()->isKindOfClass(SymbolState *) )
+                    {
+                        if (minus->compareOperatorPrecedence( static_cast<SymbolState *>(stack.top().get()) ) <= 0) {
+                            tokens.push_back(stack.top()); stack.pop();
+                            continue;
+                        }
+                    
+                        break;
+                    }
+                    
+                    stack.push(minus);
                 }
                 else if (Accept(scanner->next(), DivideSymbolValidator())) {
                     stack.push( std::make_shared<DivideOperatorState>(scanner->advance()) );
@@ -97,11 +107,11 @@ class Application {
             
             while (stack.size() > 0) {
                 auto t = stack.top();
-                queue.push(t);
+                tokens.push_back(t);
                 stack.pop();
             }
         
-            float result = CalculateExpression(queue);
+            float result = CalculateExpression(tokens);
         
             std::cout << result << std::endl;
         }

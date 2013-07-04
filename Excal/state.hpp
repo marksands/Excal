@@ -112,18 +112,23 @@ class SymbolState : public SingleCharacterState {
     
         virtual ~SymbolState() { }
     
-        char operator()() const {
+        inline char operator()() const __attribute__((always_inline)) {
             return value;
         }
     
         float operator()(float T, float U) {
             return impl_getOperator(T, U);
         }
+    
+        inline bool compareOperatorPrecedence(SymbolState * rhs) __attribute__((always_inline)) {
+            return this->impl_operatorPrecedence() - rhs->impl_operatorPrecedence();
+        }
         
     private:
         value_type value;
     
         virtual float impl_getOperator(float T, float U) = 0;
+        virtual int impl_operatorPrecedence() = 0;
 };
 
 class PlusOperatorState : public SymbolState {
@@ -132,6 +137,10 @@ class PlusOperatorState : public SymbolState {
     
         inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
             return T + U;
+        }
+
+        inline int impl_operatorPrecedence() __attribute__((always_inline)) {
+            return 1;
         }
 };
 
@@ -142,6 +151,10 @@ class MinusOperatorState : public SymbolState {
         inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
             return T - U;
         }
+
+        inline int impl_operatorPrecedence() __attribute__((always_inline)) {
+            return 1;
+        }
 };
 
 class MultiplyOperatorState : public SymbolState {
@@ -150,6 +163,10 @@ class MultiplyOperatorState : public SymbolState {
     
         inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
             return T * U;
+        }
+
+        inline int impl_operatorPrecedence() __attribute__((always_inline)) {
+            return 2;
         }
 };
 
@@ -160,6 +177,10 @@ class DivideOperatorState : public SymbolState {
         inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
             return T / U;
         }
+
+        inline int impl_operatorPrecedence() __attribute__((always_inline)) {
+            return 2;
+        }
 };
 
 class PowerOfOperatorState : public SymbolState {
@@ -168,6 +189,10 @@ class PowerOfOperatorState : public SymbolState {
     
         inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
             return pow(T, U);
+        }
+
+        inline int impl_operatorPrecedence() __attribute__((always_inline)) {
+            return 3;
         }
 };
 
