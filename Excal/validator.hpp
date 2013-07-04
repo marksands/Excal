@@ -19,13 +19,7 @@ private:
     virtual bool impl_validation(char character) const = 0;
 };
 
-struct IntegralValidator : Validator<IntegralValidator> {
-    bool impl_validation(char character) const {
-        return character >= '0' && character <= '9';
-    }
-};
-
-struct FloatValidator : Validator<FloatValidator> {
+struct NumberValidator : Validator<NumberValidator> {
     bool impl_validation(char character) const {
         return character >= '0' && character <= '9';
     }

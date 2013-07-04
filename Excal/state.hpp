@@ -16,6 +16,7 @@ class State {
         typedef std::nullptr_t value_type;
         
         std::string str;
+        
         virtual ~State() { }
         
         template <typename T> bool isKindOfClass() {
@@ -62,14 +63,12 @@ class NumberState : public MultiCharacterState {
         }
         
         void append(char character) {
-            std::ostringstream s;
-            s << std::string(1, character);
-            str += s.str();
+            str += character;
         }
     
         float operator()() const {
-            return stol(str);
-        };
+            return stof(str);
+        }
 };
 
 // -----------------------------------------------------------------------------
@@ -79,6 +78,30 @@ class SingleCharacterState : public State {
         virtual ~SingleCharacterState() { }
 };
 
+class ParenthesisState : public SingleCharacterState {
+    public:
+        typedef char value_type;
+    
+        ParenthesisState(char character) {
+            value = character;
+        }
+    
+        virtual ~ParenthesisState() { }
+    
+    private:
+        value_type value;
+};
+
+class RightParenthesisState : public ParenthesisState {
+    public:
+        RightParenthesisState(char character) : ParenthesisState(character) { }
+};
+
+class LeftParenthesisState : public ParenthesisState {
+    public:
+        LeftParenthesisState(char character) : ParenthesisState(character) { }
+};
+
 class SymbolState : public SingleCharacterState {
     public:
         typedef char value_type;
@@ -86,7 +109,9 @@ class SymbolState : public SingleCharacterState {
         SymbolState(char character) {
             value = character;
         }
-        
+    
+        virtual ~SymbolState() { }
+    
         char operator()() const {
             return value;
         }
