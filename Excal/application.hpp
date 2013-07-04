@@ -34,33 +34,19 @@ class Application {
                     auto state1 = tokenStack.top(); tokenStack.pop();
                     auto state2 = tokenStack.top(); tokenStack.pop();
                     
-                    float d1 = 0, d2 = 0;
+                    float d1 = State::GetValue<NumberState>()(state1);
+                    float d2 = State::GetValue<NumberState>()(state2);
                     
-                    if (state1->isKindOfClass(IntegralState *)) {
-                        d1 = State::GetValue<IntegralState>()(state1);
-                    }
-                    else if (state1->isKindOfClass(FloatState *)) {
-                        d1 = State::GetValue<FloatState>()(state1);
-                    }
-                    
-                    if (state2->isKindOfClass(IntegralState *)) {
-                        d2 = State::GetValue<IntegralState>()(state2);
-                    }
-                    else if (state2->isKindOfClass(FloatState *)) {
-                        d2 = State::GetValue<FloatState>()(state2);
-                    }
-                    
-                    // calls operator()(float T, float U) internally
                     float result = (*static_cast<SymbolState *>(state.get()))(d1, d2);
                     
-                    std::shared_ptr<State> newState = std::make_shared<FloatState>(result);
+                    std::shared_ptr<State> newState = std::make_shared<NumberState>(result);
                     tokenStack.push( newState );
                 }
             }
             
             auto state = tokenStack.top();
             
-            return State::GetValue<FloatState>()(state);
+            return State::GetValue<NumberState>()(state);
         }
     
     public:
@@ -79,17 +65,17 @@ class Application {
                 if (Accept(scanner->next(), IntegralValidator())) {
                     char c = scanner->advance();
                     
-                    states.push_back( std::make_shared<IntegralState>(c) );
-                    queue.push( std::make_shared<IntegralState>(c) );
+                    states.push_back( std::make_shared<NumberState>(c) );
+                    queue.push( std::make_shared<NumberState>(c) );
                 }
                 else if (Accept(scanner->next(), FloatValidator())) {
                     char c = scanner->advance();
                     
-                    states.push_back( std::make_shared<FloatState>(c) );
-                    queue.push( std::make_shared<FloatState>(c) );
+                    states.push_back( std::make_shared<NumberState>(c) );
+                    queue.push( std::make_shared<NumberState>(c) );
                 }
                 else if (Accept(scanner->next(), PeriodValidator())) {
-                    states.push_back( std::make_shared<FloatState>(scanner->advance()) );
+                    states.push_back( std::make_shared<NumberState>(scanner->advance()) );
                 }
                 else if (Accept(scanner->next(), LeftParenthesisValidator())) {
                     // states.push_back( std::make_shared<SymbolState>(scanner->advance()) );

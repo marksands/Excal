@@ -47,42 +47,29 @@ class MultiCharacterState : public State {
         virtual ~MultiCharacterState() { }
 };
 
-class IntegralState : public MultiCharacterState {
-    public:
-        typedef int value_type;
-        
-        IntegralState(char character) {
-            str = std::string(1, character);
-        }
-    
-        IntegralState(float result) {
-            std::ostringstream s;
-            s << result;
-            str = s.str();
-        }
-    
-        int operator()() const {
-            return stoi(str);
-        }
-};
-
-class FloatState : public MultiCharacterState {
+class NumberState : public MultiCharacterState {
     public:
         typedef float value_type;
     
-        FloatState(char character) {
+        NumberState(char character) {
             str = std::string(1, character);
         }
-        
-        FloatState(float result) {
+    
+        NumberState(float expression) {
             std::ostringstream s;
-            s << result;
+            s << expression;
             str = s.str();
+        }
+        
+        void append(char character) {
+            std::ostringstream s;
+            s << std::string(1, character);
+            str += s.str();
         }
     
         float operator()() const {
             return stol(str);
-        }
+        };
 };
 
 // -----------------------------------------------------------------------------
