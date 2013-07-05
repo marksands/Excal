@@ -66,8 +66,12 @@ class Application {
             while (scanner->valid()) {
                 if (Accept(scanner->next(), NumberValidator())) {
                     auto number = std::make_shared<NumberState>(scanner->advance());
-                    while (Accept(scanner->next(), NumberValidator()) || Accept(scanner->next(), PeriodValidator())) {
-                        number->append(scanner->advance());
+                    while (Accept(scanner->next(), NumberValidator()) || Accept(scanner->next(), PeriodValidator()) || Accept(scanner->next(), CommaValidator())) {
+                        if (Accept(scanner->next(), CommaValidator())) {
+                            scanner->advance();
+                        } else {
+                            number->append(scanner->advance());
+                        }
                     }
                     tokens.push_back(number);
                 }
