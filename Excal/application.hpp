@@ -18,9 +18,17 @@
 
 class Application {
     private:
+        typedef std::stack<std::shared_ptr<State>> StateStack;
+        typedef std::vector<std::shared_ptr<State>> StateVector;
+        
+        static void RotateOperatorPrecedence(StateStack& stack, StateVector& tokens, std::shared_ptr<SymbolState> state) {
+            while (!stack.empty() && stack.top()->isKindOfClass(SymbolState *) && state->compareOperatorPrecedence(static_cast<SymbolState *>(stack.top().get()))) {
+                   tokens.push_back(stack.top()); stack.pop();
+            }
+        }
     
-        static float CalculateExpression(std::vector<std::shared_ptr<State>> tokens) {
-            std::stack< std::shared_ptr<State> > tokenStack;
+        static float CalculateExpression(StateVector tokens) {
+            StateStack tokenStack;
             
             for (auto state : tokens)
             {
@@ -33,7 +41,7 @@ class Application {
                     
                     float d1 = State::GetValue<NumberState>()(state1);
                     float d2 = State::GetValue<NumberState>()(state2);
-                                        
+                    
                     float result = (*static_cast<SymbolState *>(state.get()))(d2, d1);
                     
                     std::shared_ptr<State> newState = std::make_shared<NumberState>(result);
@@ -49,12 +57,11 @@ class Application {
     public:
         static void Run(int argc, const char * argv[])
         {
-            // uncomment to enable command line support
-            //Scanner * scanner = new Scanner(argv[2]);
-            Scanner * scanner = new Scanner("6-2-2");
+            // Scanner * scanner = new Scanner(argv[2]);
+            Scanner * scanner = new Scanner("3.14 * 2 - 3.14");
             
-            std::vector< std::shared_ptr<State> > tokens;
-            std::stack< std::shared_ptr<State> > stack;
+            StateVector tokens;
+            StateStack stack;
             
             while (scanner->valid()) {
                 if (Accept(scanner->next(), NumberValidator())) {
@@ -71,32 +78,29 @@ class Application {
                     stack.push( std::make_shared<RightParenthesisState>(scanner->advance()));
                 }
                 else if (Accept(scanner->next(), PlusSymbolValidator())) {
-                    stack.push( std::make_shared<PlusOperatorState>(scanner->advance()) );
+                    auto plus = std::make_shared<PlusOperatorState>(scanner->advance());
+                    RotateOperatorPrecedence(stack, tokens, plus);
+                    stack.push(plus);
                 }
                 else if (Accept(scanner->next(), MinusSymbolValidator())) {
-
-                    // TODO: this might not be working, not entirely sure what's going on.
                     auto minus = std::make_shared<MinusOperatorState>(scanner->advance());
-                    while ( !stack.empty() && stack.top()->isKindOfClass(SymbolState *) )
-                    {
-                        if (minus->compareOperatorPrecedence( static_cast<SymbolState *>(stack.top().get()) ) <= 0) {
-                            tokens.push_back(stack.top()); stack.pop();
-                            continue;
-                        }
-                    
-                        break;
-                    }
-                    
+                    RotateOperatorPrecedence(stack, tokens, minus);
                     stack.push(minus);
                 }
                 else if (Accept(scanner->next(), DivideSymbolValidator())) {
-                    stack.push( std::make_shared<DivideOperatorState>(scanner->advance()) );
+                    auto divide = std::make_shared<DivideOperatorState>(scanner->advance());
+                    RotateOperatorPrecedence(stack, tokens, divide);
+                    stack.push(divide);
                 }
                 else if (Accept(scanner->next(), MultiplySymbolValidator())) {
-                    stack.push( std::make_shared<MultiplyOperatorState>(scanner->advance()) );
+                    auto multiply = std::make_shared<MultiplyOperatorState>(scanner->advance());
+                    RotateOperatorPrecedence(stack, tokens, multiply);
+                    stack.push(multiply);
                 }
                 else if (Accept(scanner->next(), PowerOfSymbolValidator())) {
-                    stack.push( std::make_shared<PowerOfOperatorState>(scanner->advance()) );
+                    auto powerOf = std::make_shared<PowerOfOperatorState>(scanner->advance());
+                    RotateOperatorPrecedence(stack, tokens, powerOf);
+                    stack.push(powerOf);
                 }
                 else {
                     scanner->advance();
@@ -105,14 +109,13 @@ class Application {
                 }
             }
             
-            while (stack.size() > 0) {
-                auto t = stack.top();
-                tokens.push_back(t);
+            while (!stack.empty()) {
+                tokens.push_back(stack.top());
                 stack.pop();
             }
         
             float result = CalculateExpression(tokens);
-        
+
             std::cout << result << std::endl;
         }
 };

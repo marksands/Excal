@@ -31,6 +31,12 @@ struct PeriodValidator : Validator<PeriodValidator> {
     }
 };
 
+struct CommaValidator : Validator<CommaValidator> {
+    bool impl_validation(char character) const {
+        return character == ',';
+    }
+};
+
 struct LeftParenthesisValidator : Validator<LeftParenthesisValidator> {
     bool impl_validation(char character) const {
         return character == '(';

@@ -14,11 +14,11 @@
 class State {
     public:
         typedef std::nullptr_t value_type;
-        
+    
         std::string str;
         
         virtual ~State() { }
-        
+    
         template <typename T> bool isKindOfClass() {
             if (dynamic_cast<T>(this) != nullptr) {
                 return true;
@@ -120,7 +120,7 @@ class SymbolState : public SingleCharacterState {
             return impl_getOperator(T, U);
         }
     
-        inline bool compareOperatorPrecedence(SymbolState * rhs) __attribute__((always_inline)) {
+        inline int compareOperatorPrecedence(SymbolState * rhs) __attribute__((always_inline)) {
             return this->impl_operatorPrecedence() - rhs->impl_operatorPrecedence();
         }
         
@@ -192,7 +192,7 @@ class PowerOfOperatorState : public SymbolState {
         }
 
         inline int impl_operatorPrecedence() __attribute__((always_inline)) {
-            return 3;
+            return 2;
         }
 };
 
