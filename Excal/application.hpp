@@ -22,7 +22,7 @@ class Application {
         typedef std::vector<std::shared_ptr<State>> StateVector;
         
         static void RotateOperatorPrecedence(StateStack& stack, StateVector& tokens, std::shared_ptr<SymbolState> state) {
-            while (!stack.empty() && stack.top()->isKindOfClass(SymbolState *) && state->compareOperatorPrecedence(static_cast<SymbolState *>(stack.top().get()))) {
+            while (!stack.empty() && stack.top()->isKindOfClass(SymbolState *) && state->compareOperatorPrecedence(static_cast<SymbolState *>(stack.top().get())) <= 0) {
                    tokens.push_back(stack.top()); stack.pop();
             }
         }
