@@ -58,7 +58,7 @@ class Application {
         static void Run(int argc, const char * argv[])
         {
             // Scanner * scanner = new Scanner(argv[2]);
-            Scanner * scanner = new Scanner("3.14 * 2 - 3.14");
+            Scanner * scanner = new Scanner("(2+1.14)*2");
             
             StateVector tokens;
             StateStack stack;
@@ -72,10 +72,15 @@ class Application {
                     tokens.push_back(number);
                 }
                 else if (Accept(scanner->next(), LeftParenthesisValidator())) {
-                    stack.push( std::make_shared<LeftParenthesisState>(scanner->advance()));
+                    auto leftParenthesis = std::make_shared<LeftParenthesisState>(scanner->advance());
+                    stack.push(leftParenthesis);
                 }
                 else if (Accept(scanner->next(), RightParenthesisValidator())) {
-                    stack.push( std::make_shared<RightParenthesisState>(scanner->advance()));
+                    auto rightParenthesis = std::make_shared<RightParenthesisState>(scanner->advance());
+                    while (!stack.empty() && !stack.top()->isKindOfClass(LeftParenthesisState*)) {
+                        tokens.push_back(stack.top()); stack.pop();
+                    }
+                    stack.pop();
                 }
                 else if (Accept(scanner->next(), PlusSymbolValidator())) {
                     auto plus = std::make_shared<PlusOperatorState>(scanner->advance());
