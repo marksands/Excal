@@ -27,6 +27,11 @@ int main(int argc, const char * argv[])
     const char *expression5[] = {"system_path", "(2+2)*4"};
     Application::Run(1, expression5);
     std::cout << std::endl;
+
+    std::cout << "Tests Ignores Spaces: 3 + 4 * 2 / ( 1 - 5 ) = 1" << std::endl;
+    const char *expression6[] = {"system_path", "3 + 4 * 2 / ( 1 - 5 )"};
+    Application::Run(1, expression6);
+    std::cout << std::endl;
     
     return 0;
 }
