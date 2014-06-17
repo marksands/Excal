@@ -1,11 +1,3 @@
-//
-//  validator.hpp
-//  KE
-//
-//  Created by Mark Sands on 7/2/13.
-//  Copyright (c) 2013 Mark Sands. All rights reserved.
-//
-
 #pragma once
 
 #include <algorithm>

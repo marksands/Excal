@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4D37442B17852D0600F1896F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D37442A17852D0600F1896F /* main.cpp */; };
 		4D37442D17852D0600F1896F /* Excal.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D37442C17852D0600F1896F /* Excal.1 */; };
+		76A0E282194FCD3700492ACA /* Excal.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D37442C17852D0600F1896F /* Excal.1 */; };
+		76A0E288194FCD5900492ACA /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76A0E287194FCD5900492ACA /* tests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,6 +24,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		76A0E281194FCD3700492ACA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				76A0E282194FCD3700492ACA /* Excal.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -32,10 +44,19 @@
 		4D37443417852D1E00F1896F /* scanner.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scanner.hpp; sourceTree = "<group>"; };
 		4D37443517852D1E00F1896F /* application.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = application.hpp; sourceTree = "<group>"; };
 		4D37443617852D1E00F1896F /* state.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = state.hpp; sourceTree = "<group>"; };
+		76A0E286194FCD3700492ACA /* Excal Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Excal Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
+		76A0E287194FCD5900492ACA /* tests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tests.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4D37442417852D0600F1896F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A0E280194FCD3700492ACA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -57,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				4D37442717852D0600F1896F /* Excal */,
+				76A0E286194FCD3700492ACA /* Excal Tests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -69,6 +91,7 @@
 				4D37443517852D1E00F1896F /* application.hpp */,
 				4D37443617852D1E00F1896F /* state.hpp */,
 				4D37442A17852D0600F1896F /* main.cpp */,
+				76A0E287194FCD5900492ACA /* tests.cpp */,
 				4D37442C17852D0600F1896F /* Excal.1 */,
 			);
 			path = Excal;
@@ -94,6 +117,23 @@
 			productReference = 4D37442717852D0600F1896F /* Excal */;
 			productType = "com.apple.product-type.tool";
 		};
+		76A0E27D194FCD3700492ACA /* Excal Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76A0E283194FCD3700492ACA /* Build configuration list for PBXNativeTarget "Excal Tests" */;
+			buildPhases = (
+				76A0E27E194FCD3700492ACA /* Sources */,
+				76A0E280194FCD3700492ACA /* Frameworks */,
+				76A0E281194FCD3700492ACA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Excal Tests";
+			productName = Excal;
+			productReference = 76A0E286194FCD3700492ACA /* Excal Tests */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -116,6 +156,7 @@
 			projectRoot = "";
 			targets = (
 				4D37442617852D0600F1896F /* Excal */,
+				76A0E27D194FCD3700492ACA /* Excal Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -126,6 +167,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D37442B17852D0600F1896F /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76A0E27E194FCD3700492ACA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76A0E288194FCD5900492ACA /* tests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +265,20 @@
 			};
 			name = Release;
 		};
+		76A0E284194FCD3700492ACA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Excal Tests";
+			};
+			name = Debug;
+		};
+		76A0E285194FCD3700492ACA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Excal Tests";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -235,6 +298,16 @@
 				4D37443217852D0600F1896F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76A0E283194FCD3700492ACA /* Build configuration list for PBXNativeTarget "Excal Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76A0E284194FCD3700492ACA /* Debug */,
+				76A0E285194FCD3700492ACA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

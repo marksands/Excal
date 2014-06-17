@@ -1,11 +1,3 @@
-//
-//  application.hpp
-//  KE
-//
-//  Created by Mark Sands on 7/2/13.
-//  Copyright (c) 2013 Mark Sands. All rights reserved.
-//
-
 #pragma once
 
 #include <queue>
@@ -57,8 +49,7 @@ class Application {
     public:
         static void Run(int argc, const char * argv[])
         {
-            // Scanner * scanner = new Scanner(argv[2]);
-            Scanner * scanner = new Scanner("(2+1.14)*2");
+            Scanner * scanner = new Scanner(argv[1]);
             
             StateVector tokens;
             StateStack stack;

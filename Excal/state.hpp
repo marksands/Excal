@@ -1,11 +1,3 @@
-//
-//  state.hpp
-//  KE
-//
-//  Created by Mark Sands on 7/2/13.
-//  Copyright (c) 2013 Mark Sands. All rights reserved.
-//
-
 #pragma once
 
 #include <string>
@@ -105,7 +97,8 @@ class LeftParenthesisState : public ParenthesisState {
 class SymbolState : public SingleCharacterState {
     public:
         typedef char value_type;
-        
+        typedef float number_type;
+    
         SymbolState(char character) {
             value = character;
         }
@@ -116,7 +109,7 @@ class SymbolState : public SingleCharacterState {
             return value;
         }
     
-        float operator()(float T, float U) {
+        number_type operator()(number_type T, number_type U) {
             return impl_getOperator(T, U);
         }
     
@@ -127,7 +120,7 @@ class SymbolState : public SingleCharacterState {
     private:
         value_type value;
     
-        virtual float impl_getOperator(float T, float U) = 0;
+        virtual float impl_getOperator(number_type T, number_type U) = 0;
         virtual int impl_operatorPrecedence() = 0;
 };
 
@@ -135,7 +128,7 @@ class PlusOperatorState : public SymbolState {
     public:
         PlusOperatorState(char character) : SymbolState(character) { }
     
-        inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
+        inline float impl_getOperator(number_type T, number_type U) __attribute__((always_inline)) {
             return T + U;
         }
 
@@ -148,7 +141,7 @@ class MinusOperatorState : public SymbolState {
     public:
         MinusOperatorState(char character) : SymbolState(character) { }
 
-        inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
+        inline float impl_getOperator(number_type T, number_type U) __attribute__((always_inline)) {
             return T - U;
         }
 
@@ -161,7 +154,7 @@ class MultiplyOperatorState : public SymbolState {
     public:
         MultiplyOperatorState(char character) : SymbolState(character) { }
     
-        inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
+        inline float impl_getOperator(number_type T, number_type U) __attribute__((always_inline)) {
             return T * U;
         }
 
@@ -174,7 +167,7 @@ class DivideOperatorState : public SymbolState {
     public:
         DivideOperatorState(char character) : SymbolState(character) { }
     
-        inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
+        inline float impl_getOperator(number_type T, number_type U) __attribute__((always_inline)) {
             return T / U;
         }
 
@@ -187,7 +180,7 @@ class PowerOfOperatorState : public SymbolState {
     public:
         PowerOfOperatorState(char character) : SymbolState(character) { }
     
-        inline float impl_getOperator(float T, float U) __attribute__((always_inline)) {
+        inline float impl_getOperator(number_type T, number_type U) __attribute__((always_inline)) {
             return pow(T, U);
         }
 
